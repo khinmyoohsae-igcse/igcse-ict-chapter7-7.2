@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE ICT - Advanced Systems Design & Validation Quiz (30 MCQs)</title>
+    <style>
+        :root {
+            --bg-main: #090d16;
+            --bg-card: #131d31;
+            --border-color: #223354;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .quiz-status {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .score-pill {
+            background-color: #0c4a6e;
+            color: #7dd3fc;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #0284c7;
+        }
+
+        .card {
+            width: 100%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            background-color: #1e293b;
+            color: var(--text-main);
+            padding: 1rem 1.25rem;
+            border-radius: 0.85rem;
+            border: 1px solid #334155;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #283548;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: #064e3b !important;
+            border-color: #059669 !important;
+            color: #ecfdf5 !important;
+        }
+
+        .option-btn.incorrect {
+            background-color: #7f1d1d !important;
+            border-color: #dc2626 !important;
+            color: #fee2e2 !important;
+        }
+
+        .feedback-box {
+            padding: 1.15rem;
+            border-radius: 0.85rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-box.correct-feedback {
+            background-color: #022c22;
+            border: 1px solid #047857;
+            color: #a7f3d0;
+        }
+
+        .feedback-box.incorrect-feedback {
+            background-color: #450a0a;
+            border: 1px solid #b91c1c;
+            color: #fecdd3;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            border-radius: 0.85rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .results-card {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .results-card h2 {
+            font-size: 2.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .results-card p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>IGCSE ICT Practice Quiz</h1>
+        <p>Topics 7.2 Design, Validation Routines, Input & Output Formats (30 New MCQs)</p>
+    </header>
+
+    <main>
+        <div class="quiz-status">
+            <span id="question-counter">Question 1 of 30</span>
+            <span id="score-display" class="score-pill">Score: 0</span>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="card">
+            <div id="question-box" class="question-text">
+                Loading question...
+            </div>
+
+            <div id="options-container" class="options-list">
+                <!-- Options populated dynamically -->
+            </div>
+
+            <div id="feedback-box" class="feedback-box hidden">
+                <!-- Feedback populated dynamically -->
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button id="next-btn" onclick="nextQuestion()" class="btn-primary hidden">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="results-container" class="card results-card hidden">
+            <h2>Quiz Completed! 🎉</h2>
+            <p id="final-score">You scored X out of 30</p>
+            <button onclick="restartQuiz()" class="btn-primary">Restart Quiz</button>
+        </div>
+    </main>
+
+    <footer>
+        IGCSE ICT Revision &bull; Systems Design
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "In the context of Systems Analysis and Design, what is the core deliverable of the 'Design' stage?",
+                options: [
+                    { text: "Detailed technical specifications and blueprints for data structures, input forms, validation rules, screen interfaces, and output reports", isCorrect: true, rationale: "The design stage translates user requirements into precise system blueprints for programmers to build." },
+                    { text: "Initial fact-finding interview transcripts gathered from managers", isCorrect: false, rationale: "Interviews take place during the analysis stage." },
+                    { text: "Live user acceptance test reports", isCorrect: false, rationale: "Testing occurs after development/implementation." },
+                    { text: "Final post-implementation staff evaluation surveys", isCorrect: false, rationale: "Evaluation occurs at the very end of the life cycle." }
+                ]
+            },
+            {
+                question: "What is the primary function of data validation in an input screen design?",
+                options: [
+                    { text: "To check automatically whether input data is sensible and conforms to specific predefined rules before accepting it", isCorrect: true, rationale: "Validation routines check data logic programmatically, though they cannot verify truthfulness." },
+                    { text: "To check whether typed text matches the original paper document character-for-character", isCorrect: false, rationale: "This describes verification, not validation." },
+                    { text: "To scan product barcodes at supermarket checkouts", isCorrect: false, rationale: "This describes point-of-sale scanning." },
+                    { text: "To format hard disk drives into clean partitions", isCorrect: false, rationale: "This describes disk management." }
+                ]
+            },
+            {
+                question: "Why can a validation check never guarantee that data entered into a computer is 100% accurate?",
+                options: [
+                    { text: "Because validation checks if data is reasonable, but someone could type a reasonable number that is still factually incorrect (e.g., typing age 25 instead of 26)", isCorrect: true, rationale: "Validation catches unreasonable data (like age 999), but cannot detect a valid-looking typo (like typing 25 instead of 24)." },
+                    { text: "Because computers lack electrical power supplies", isCorrect: false, rationale: "Computers require electricity to run validation checks." },
+                    { text: "Because validation checks only work on paper documents", isCorrect: false, rationale: "Validation runs in software code." },
+                    { text: "Because validation deletes all database records automatically", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "Which validation check would be most appropriate to ensure a user does not leave a required surname field blank?",
+                options: [
+                    { text: "Presence Check", isCorrect: true, rationale: "A presence check verifies that mandatory fields are not left empty." },
+                    { text: "Range Check", isCorrect: false, rationale: "Range checks verify numerical boundaries." },
+                    { text: "Type Check", isCorrect: false, rationale: "Type checks verify data formats like text vs numbers." },
+                    { text: "Check Digit", isCorrect: false, rationale: "Check digits verify code numbers like ISBN or barcodes." }
+                ]
+            },
+            {
+                question: "Which validation check would be most appropriate to ensure a month field only accepts integer values between 1 and 12?",
+                options: [
+                    { text: "Range Check", isCorrect: true, rationale: "A range check verifies that numerical values fall within a minimum and maximum limit." },
+                    { text: "Presence Check", isCorrect: false, rationale: "Presence checks only check if fields are blank." },
+                    { text: "Length Check", isCorrect: false, rationale: "Length checks character counts." },
+                    { text: "Format Check", isCorrect: false, rationale: "Format checks character patterns." }
+                ]
+            },
+            {
+                question: "Which validation check would be most appropriate to ensure a vehicle registration plate follows the exact pattern 'LLDD LLL' (Letters/Digits)?",
+                options: [
+                    { text: "Format Check (Picture Check)", isCorrect: true, rationale: "A format check ensures data matches a specific structural pattern of letters and digits." },
+                    { text: "Range Check", isCorrect: false, rationale: "Range checks apply to numerical quantities." },
+                    { text: "Presence Check", isCorrect: false, rationale: "Presence checks only check if fields are empty." },
+                    { text: "Type Check", isCorrect: false, rationale: "Type checks verify general data types, not complex alphanumeric patterns." }
+                ]
+            },
+            {
+                question: "Which validation check would be most appropriate to ensure a password field contains exactly 8 characters?",
+                options: [
+                    { text: "Length Check", isCorrect: true, rationale: "A length check ensures character strings match a required count limit." },
+                    { text: "Range Check", isCorrect: false, rationale: "Range checks evaluate numerical magnitudes." },
+                    { text: "Presence Check", isCorrect: false, rationale: "Presence checks verify non-empty fields." },
+                    { text: "Look-up Check", isCorrect: false, rationale: "Look-up checks compare against approved table lists." }
+                ]
+            },
+            {
+                question: "Which validation check would be most appropriate to ensure that an entered product category code exists in an approved department table?",
+                options: [
+                    { text: "Look-up Check (Consistency Check)", isCorrect: true, rationale: "A look-up check compares entered data against an approved list or table of valid values." },
+                    { text: "Presence Check", isCorrect: false, rationale: "Presence checks only check for blank fields." },
+                    { text: "Length Check", isCorrect: false, rationale: "Length checks character counts." },
+                    { text: "Range Check", isCorrect: false, rationale: "Range checks evaluate numerical limits." }
+                ]
+            },
+            {
+                question: "What is the difference between 'Validation' and 'Verification'?",
+                options: [
+                    { text: "Validation is an automated computer rule check for reasonableness; verification is checking that data entered matches the original paper source document", isCorrect: true, rationale: "Validation checks if data makes sense programmatically; verification checks if data was transcribed correctly from source documents." },
+                    { text: "Validation is done by humans, while verification is done by keyboards", isCorrect: false, rationale: "This is the reverse; validation is automated by software." },
+                    { text: "Validation checks disk storage space, while verification checks screen color", isCorrect: false, rationale: "Unrelated." },
+                    { text: "There is no difference between them", isCorrect: false, rationale: "Their checking methods and definitions differ fundamentally." }
+                ]
+            },
+            {
+                question: "What are the two primary methods of data verification?",
+                options: [
+                    { text: "Visual Verification (proofreading screen data against paper source documents) and Double Entry (entering data twice and comparing)", isCorrect: true, rationale: "Double entry and visual proofreading are the standard IGCSE ICT data verification techniques." },
+                    { text: "Presence Check and Range Check", isCorrect: false, rationale: "These are validation checks, not verification methods." },
+                    { text: "Batch Processing and Real-Time Processing", isCorrect: false, rationale: "These are data processing methods." },
+                    { text: "Interviews and Questionnaires", isCorrect: false, rationale: "These are analysis fact-finding methods." }
+                ]
+            },
+            {
+                question: "Why is 'Double Entry' verification effective at catching transcription errors?",
+                options: [
+                    { text: "Because if the two separate entries do not match character-for-character, the computer flags the discrepancy immediately", isCorrect: true, rationale: "Comparing two independent entries highlights typing mistakes right away." },
+                    { text: "Because it automatically runs range checks on numbers", isCorrect: false, rationale: "Range checks are validation, not double entry comparison." },
+                    { text: "Because it prints paper receipts automatically", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Because it deletes duplicate database files", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is an 'Input Format' (Data Capture Form / Screen Design)?",
+                options: [
+                    { text: "The layout and design of data entry screens or paper forms used to collect data from users clearly and accurately", isCorrect: true, rationale: "Good input form design ensures data is captured efficiently with minimal user errors." },
+                    { text: "The physical cardboard packaging boxes for computer monitors", isCorrect: false, rationale: "This describes product packaging." },
+                    { text: "The programming language syntax used for writing code", isCorrect: false, rationale: "This describes programming syntax." },
+                    { text: "The hard disk drive partitioning format", isCorrect: false, rationale: "This describes disk formatting." }
+                ]
+            },
+            {
+                question: "What key design features should a well-designed computerized data capture screen include?",
+                options: [
+                    { text: "Clear headings, logical tab order, appropriate field sizes, mandatory field labels, placeholder hints, and intuitive navigation buttons", isCorrect: true, rationale: "Good screen design improves usability, data accuracy, and user efficiency." },
+                    { text: "Tiny font sizes, random field placement, and clashing neon background colors", isCorrect: false, rationale: "This creates poor usability and high error rates." },
+                    { text: "Zero input fields or buttons", isCorrect: false, rationale: "Forms require input fields to capture data." },
+                    { text: "Mandatory requirement to type upside down", isCorrect: false, rationale: "This is absurd." }
+                ]
+            },
+            {
+                question: "What is the difference between screen layouts and report layouts in systems design?",
+                options: [
+                    { text: "Screen layouts are designed for interactive data entry and viewing on computer monitors; report layouts are formatted for printing or PDF output summaries", isCorrect: true, rationale: "Screen layouts focus on interactive input and UI; report layouts focus on structured summary printing." },
+                    { text: "Screen layouts are printed on paper, while report layouts are displayed on screens", isCorrect: false, rationale: "This is reversed." },
+                    { text: "Screen layouts require no design, while report layouts require C++ coding", isCorrect: false, rationale: "Both require careful design." },
+                    { text: "There is no difference between them", isCorrect: false, rationale: "Their purpose and medium differ." }
+                ]
+            },
+            {
+                question: "What key elements should be included in a well-designed printed report layout?",
+                options: [
+                    { text: "Report title, run date/time, page numbers, clear column headers, grouped summary data, and professional alignment", isCorrect: true, rationale: "Professional reports require headers, footers, timestamps, page numbers, and structured tables." },
+                    { text: "Random flashing animated GIFs and spinning text", isCorrect: false, rationale: "Printed paper reports cannot display animations." },
+                    { text: "Zero column headings or page numbers", isCorrect: false, rationale: "Headings and page numbers are essential for readable reports." },
+                    { text: "Blank empty pages with no data", isCorrect: false, rationale: "Reports must display summarized data clearly." }
+                ]
+            },
+            {
+                question: "Why is 'navigation' important when designing interactive data entry screen layouts?",
+                options: [
+                    { text: "To ensure users can move intuitively between fields, submit forms easily, and clear errors without getting confused or trapped on a page", isCorrect: true, rationale: "Clear navigation buttons (Save, Cancel, Next, Back) and logical tab orders make software user-friendly." },
+                    { text: "To help pilots navigate airplanes through storms", isCorrect: false, rationale: "Screen navigation is for software user interfaces, not aircraft flight paths." },
+                    { text: "To guide ships across ocean waters", isCorrect: false, rationale: "This describes marine navigation." },
+                    { text: "To format hard disk partitions", isCorrect: false, rationale: "This is disk management." }
+                ]
+            },
+            {
+                question: "How do placeholder text and tooltips assist users on data input forms?",
+                options: [
+                    { text: "They provide helpful hints and examples of expected data formats (e.g., 'e.g., DD/MM/YYYY') directly inside or beside input fields", isCorrect: true, rationale: "Placeholders and tooltips guide users on correct data entry, reducing mistakes." },
+                    { text: "They display computer virus warnings", isCorrect: false, rationale: "Placeholders guide data entry, they are not virus alerts." },
+                    { text: "They print paper receipts automatically", isCorrect: false, rationale: "Unrelated." },
+                    { text: "They lock user accounts permanently", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "Why should error messages resulting from validation failures be clear and helpful?",
+                options: [
+                    { text: "To tell the user exactly what went wrong and how to fix it (e.g., 'Error: Age must be between 1 and 120') rather than displaying cryptic error codes", isCorrect: true, rationale: "Clear error messages guide users to correct their mistakes quickly and easily." },
+                    { text: "To insult the user for making a typing mistake", isCorrect: false, rationale: "Error messages should be polite, professional, and helpful." },
+                    { text: "To crash the computer operating system immediately", isCorrect: false, rationale: "Error messages should prevent crashes, not cause them." },
+                    { text: "To delete all database files", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is a 'drop-down menu' (combo box) and why is it used on input forms instead of free text entry?",
+                options: [
+                    { text: "A UI control that lets users select a pre-approved option from a list, preventing spelling mistakes and invalid data entry", isCorrect: true, rationale: "Drop-down lists restrict input to valid choices, eliminating typing and spelling errors." },
+                    { text: "A menu used for ordering food in restaurant cafeterias", isCorrect: false, rationale: "While named similarly, UI drop-down menus select software options." },
+                    { text: "A hidden trapdoor underneath computer desks", isCorrect: false, rationale: "This is architectural building design." },
+                    { text: "A network routing protocol for Wi-Fi routers", isCorrect: false, rationale: "This describes network routing." }
+                ]
+            },
+            {
+                question: "What is 'radio button' design used for on data capture forms?",
+                options: [
+                    { text: "To allow the user to select exactly one option from a mutually exclusive set of choices", isCorrect: true, rationale: "Radio buttons are designed so only one option can be chosen in a group." },
+                    { text: "To tune into commercial radio broadcast music stations", isCorrect: false, rationale: "Radio buttons are UI form elements, not audio receivers." },
+                    { text: "To turn off computer power supplies", isCorrect: false, rationale: "This is a power switch." },
+                    { text: "To adjust monitor screen brightness", isCorrect: false, rationale: "This is display settings." }
+                ]
+            },
+            {
+                question: "What is 'checkbox' design used for on data capture forms?",
+                options: [
+                    { text: "To allow the user to select multiple independent options from a set of choices (yes/no or multi-select)", isCorrect: true, rationale: "Checkboxes allow zero, one, or multiple selections independently." },
+                    { text: "To check off grocery items on paper shopping lists", isCorrect: false, rationale: "While conceptually similar, checkboxes are UI form controls." },
+                    { text: "To audit financial bank accounts", isCorrect: false, rationale: "This describes financial accounting." },
+                    { text: "To format hard disk drives", isCorrect: false, rationale: "This is disk management." }
+                ]
+            },
+            {
+                question: "Why is 'consistency' important across different screen layouts in an application?",
+                options: [
+                    { text: "To ensure a uniform look and feel (consistent fonts, colors, button placements, and navigation menus) so users can learn and use the system easily", isCorrect: true, rationale: "Consistent UI design reduces user training time and prevents confusion." },
+                    { text: "To ensure every screen looks completely different and random", isCorrect: false, rationale: "Random screens cause user confusion." },
+                    { text: "To ensure computers consume zero electrical power", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To eliminate the need for computer monitors", isCorrect: false, rationale: "Monitors are required to view screens." }
+                ]
+            },
+            {
+                question: "What is 'accessibility' in screen layout design?",
+                options: [
+                    { text: "Designing software interfaces that can be used by people with disabilities (such as screen reader compatibility, high contrast modes, and scalable text)", isCorrect: true, rationale: "Accessible UI design ensures users with visual, auditory, or physical impairments can use the software." },
+                    { text: "Allowing everyone on the internet to hack into the database", isCorrect: false, rationale: "Accessibility refers to usability for people with disabilities, not security breaches." },
+                    { text: "Making sure the office front door is unlocked", isCorrect: false, rationale: "This is building security." },
+                    { text: "Ensuring free Wi-Fi connection in parking lots", isCorrect: false, rationale: "This is network coverage." }
+                ]
+            },
+            {
+                question: "Why should data entry forms be designed with a logical 'tab order'?",
+                options: [
+                    { text: "So that pressing the Tab key on the keyboard moves the cursor sequentially from one field to the next in a natural reading order (left-to-right, top-to-bottom)", isCorrect: true, rationale: "Logical tab order allows fast, efficient keyboard data entry without forcing users to use the mouse constantly." },
+                    { text: "To open multiple web browser tabs automatically", isCorrect: false, rationale: "Tab order is for form field navigation, not browser tabs." },
+                    { text: "To play musical table tennis games", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To format spreadsheet table columns", isCorrect: false, rationale: "This is spreadsheet design." }
+                ]
+            },
+            {
+                question: "What is the role of the systems designer after the analysis stage is completed?",
+                options: [
+                    { text: "To take the system specification document and design the technical blueprint for software screens, databases, validation checks, and reports", isCorrect: true, rationale: "Designers translate user requirements from the specification into detailed technical design blueprints." },
+                    { text: "To write programming code in Python or Java", isCorrect: false, rationale: "Coding takes place during the implementation stage after design." },
+                    { text: "To test the system for bugs", isCorrect: false, rationale: "Testing is a separate subsequent stage." },
+                    { text: "To train office staff on how to type", isCorrect: false, rationale: "Training is part of implementation/deployment." }
+                ]
+            },
+            {
+                question: "Which validation routine would be most suitable to ensure an email address contains an '@' symbol?",
+                options: [
+                    { text: "Format Check (Picture Check)", isCorrect: true, rationale: "A format check verifies that the entered text matches the required pattern containing an '@' symbol and domain." },
+                    { text: "Presence Check", isCorrect: false, rationale: "A presence check only checks if the field is blank." },
+                    { text: "Range Check", isCorrect: false, rationale: "Range checks apply to numerical numbers, not email address characters." },
+                    { text: "Length Check", isCorrect: false, rationale: "Length checks character count, not specific symbols like '@'." }
+                ]
+            },
+            {
+                question: "What is a 'Check Digit' validation routine?",
+                options: [
+                    { text: "An extra algorithmically calculated digit appended to the end of a code (like barcodes or ISBN numbers) used to detect transcription and transposition errors", isCorrect: true, rationale: "Check digits use mathematical formulas to catch typing or scanning errors in ID numbers." },
+                    { text: "Counting how many fingers a user has on their hand", isCorrect: false, rationale: "This is biometric counting." },
+                    { text: "A check that measures calculator battery voltage levels", isCorrect: false, rationale: "This is hardware power monitoring." },
+                    { text: "A check that counts how many decimal places a number has", isCorrect: false, rationale: "This is basic rounding." }
+                ]
+            },
+            {
+                question: "Why should a report layout include a clear header and footer on every printed page?",
+                options: [
+                    { text: "To provide document context, title, generation timestamp, and page numbers so multi-page reports remain organized and easy to reference", isCorrect: true, rationale: "Headers and footers ensure printed reports remain structured, dated, and paginated correctly." },
+                    { text: "To waste printer ink cartridges faster", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To make the report file size as large as possible", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To prevent the printer from turning on", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is the purpose of prototyping during the design stage of a system?",
+                options: [
+                    { text: "To create an early working model or mock-up of screen layouts and user interfaces so clients can test and provide feedback before final coding begins", isCorrect: true, rationale: "Prototyping allows users to visualize and test screen layouts early, ensuring requirements are met before full development." },
+                    { text: "To print paper books on industrial printing presses", isCorrect: false, rationale: "This describes publishing." },
+                    { text: "To format hard disk drives", isCorrect: false, rationale: "This is disk formatting." },
+                    { text: "To conduct live penetration testing against hackers", isCorrect: false, rationale: "This is cybersecurity testing." }
+                ]
+            },
+            {
+                question: "Which summary best encapsulates 7.2 Design, Validation, and Input/Output Formats in IGCSE ICT?",
+                options: [
+                    { text: "The design stage produces detailed technical blueprints for input forms, validation routines (presence, range, length, type, format, check digit, look-up), screen layouts, and report formats to ensure efficient, accurate, and user-friendly computer systems", isCorrect: true, rationale: "Systems design creates structural blueprints for inputs, validation routines, UI screens, and reports to ensure data accuracy and usability." },
+                    { text: "Systems design is a manual paper filing technique used exclusively by librarians", isCorrect: false, rationale: "Systems design is a core ICT software development stage." },
+                    { text: "Systems design requires no validation checks or user interface layouts", isCorrect: false, rationale: "Validation routines and UI layouts are central to design." },
+                    { text: "Systems design is identical to anti-malware virus scanning", isCorrect: false, rationale: "Systems design plans software applications, not malware scanning." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionCounter = document.getElementById("question-counter");
+        const scoreDisplay = document.getElementById("score-display");
+        const questionBox = document.getElementById("question-box");
+        const optionsContainer = document.getElementById("options-container");
+        const feedbackBox = document.getElementById("feedback-box");
+        const nextBtn = document.getElementById("next-btn");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultsContainer = document.getElementById("results-container");
+        const finalScore = document.getElementById("final-score");
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add("hidden");
+            nextBtn.classList.add("hidden");
+            
+            const q = questions[currentQuestionIndex];
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            scoreDisplay.textContent = `Score: ${score}`;
+            questionBox.textContent = q.question;
+
+            // Shuffle options array randomly so correct answer is not always first
+            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+            optionsContainer.innerHTML = "";
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.textContent = opt.text;
+                btn.onclick = () => selectOption(opt, shuffledOptions);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedOpt, shuffledOptions) {
+            if (answered) return;
+            answered = true;
+
+            const allOptionButtons = optionsContainer.children;
+
+            shuffledOptions.forEach((opt, idx) => {
+                allOptionButtons[idx].disabled = true;
+                if (opt.isCorrect) {
+                    allOptionButtons[idx].classList.add("correct");
+                } else if (opt === selectedOpt && !selectedOpt.isCorrect) {
+                    allOptionButtons[idx].classList.add("incorrect");
+                }
+            });
+
+            feedbackBox.classList.remove("hidden");
+            if (selectedOpt.isCorrect) {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                feedbackBox.className = "feedback-box correct-feedback";
+                feedbackBox.innerHTML = `<strong>Correct!</strong> ${selectedOpt.rationale}`;
+            } else {
+                feedbackBox.className = "feedback-box incorrect-feedback";
+                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}`;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = "Next Question";
+            } else {
+                nextBtn.textContent = "View Results";
+            }
+            nextBtn.classList.remove("hidden");
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add("hidden");
+                resultsContainer.classList.remove("hidden");
+                finalScore.textContent = `You scored ${score} out of ${questions.length}`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsContainer.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+    </script>
+</body>
+</html>
